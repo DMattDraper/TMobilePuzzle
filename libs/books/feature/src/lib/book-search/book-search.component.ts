@@ -18,6 +18,8 @@ import { Book } from '@tmo/shared/models';
 export class BookSearchComponent implements OnInit {
   books: ReadingListBook[];
 
+  userInput: string;
+
   searchForm = this.fb.group({
     term: ''
   });
@@ -53,10 +55,11 @@ export class BookSearchComponent implements OnInit {
   }
 
   searchBooks() {
-    if (this.searchForm.value.term) {
-      this.store.dispatch(searchBooks({ term: this.searchTerm }));
-    } else {
-      this.store.dispatch(clearSearch());
-    }
+    // if (this.searchForm.value.term) {
+    //   this.store.dispatch(searchBooks({ term: this.searchTerm }));
+    // } else {
+    //   this.store.dispatch(clearSearch());
+    // }
+    this.store.dispatch(searchBooks({term: this.userInput}));
   }
 }
