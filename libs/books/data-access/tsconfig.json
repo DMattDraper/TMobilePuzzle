@@ -1,4 +1,5 @@
 {
+  "rootDir": "../",
   "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
     "types": ["node", "jest"]

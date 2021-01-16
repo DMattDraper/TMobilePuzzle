@@ -1,4 +1,4 @@
-import { Action, createReducer, on } from '@ngrx/store';
+import { Action, createReducer, on, UPDATE } from '@ngrx/store';
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 
 import * as ReadingListActions from './reading-list.actions';
@@ -52,7 +52,14 @@ const readingListReducer = createReducer(
   ),
   on(ReadingListActions.removeFromReadingList, (state, action) =>
     readingListAdapter.removeOne(action.item.bookId, state)
-  )
+  ),
+  on(ReadingListActions.markAsFinished, state => {
+    return {
+      ...state,
+      loaded: false,
+      error: null
+    };
+  })
 );
 
 export function reducer(state: State | undefined, action: Action) {
