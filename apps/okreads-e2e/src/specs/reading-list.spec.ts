@@ -18,7 +18,7 @@ describe('When: I use the reading list feature', () => {
     );
   });
 
-  it('Then: I should be able to mark a book as finished', async () => {
+  it('Then: I should be able to mark a book as read', async () => {
     await browser.get('/');
     await browser.wait(
       ExpectedConditions.textToBePresentInElement($('tmo-root'), 'okreads')
@@ -33,7 +33,7 @@ describe('When: I use the reading list feature', () => {
         'My Reading List'
       )
     );
-
+    
     const finishedButton = await $('[data-testing="mark-as-finished"]');
     await finishedButton.click();
 
@@ -43,5 +43,6 @@ describe('When: I use the reading list feature', () => {
         'Finished'
       )
     );
+    
   });
 });
