@@ -33,5 +33,13 @@ describe('When: I use the reading list feature', () => {
         'My Reading List'
       )
     );
+
+    for (let i = 0; i < 3; i++){
+      const removeButton = await $('[data-testing="remove-button"]');
+      await removeButton.click();
+      await browser.wait(
+        ExpectedConditions.textToBePresentInElement($('tmo-root'), "Undo")
+      );
+    }
   });
 });
