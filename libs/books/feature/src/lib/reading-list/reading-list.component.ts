@@ -16,7 +16,7 @@ export class ReadingListComponent {
 
   removeFromReadingList(item) {
     this.store.dispatch(removeFromReadingList({ item }));
-    let snackBarRef = this.snackBar.open('Removed ' + item.title + ' from reading list', 'Undo', { duration : 3000 });
+    const snackBarRef = this.snackBar.open('Removed ' + item.title + ' from reading list', 'Undo', { duration : 3000 });
 
     snackBarRef.onAction().subscribe(() => {
       this.undoRemove(item);

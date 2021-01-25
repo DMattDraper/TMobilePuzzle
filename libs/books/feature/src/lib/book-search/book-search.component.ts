@@ -51,7 +51,7 @@ export class BookSearchComponent implements OnInit {
 
   addBookToReadingList(book: Book) {
     this.store.dispatch(addToReadingList({ book }));
-    let snackBarRef = this.snackBar.open('Added ' + book.title + ' to reading list', 'Undo', { duration : 3000 });
+    const snackBarRef = this.snackBar.open('Added ' + book.title + ' to reading list', 'Undo', { duration : 3000 });
     
     snackBarRef.onAction().subscribe(() => {
       this.undoAdd(book);
@@ -59,13 +59,13 @@ export class BookSearchComponent implements OnInit {
   }
 
   undoAdd(book: Book){
-    let readingList = this.store.select(getReadingList);
+    const readingList = this.store.select(getReadingList);
     
     readingList.subscribe({
       next: x => { 
         for(let i = 0; i < x.length; i++){
-          if(x[i].title == book.title){
-            let item = x[i];
+          if(x[i].title === book.title){
+            const item = x[i];
             this.store.dispatch(removeFromReadingList({ item }));
           }
         } 
