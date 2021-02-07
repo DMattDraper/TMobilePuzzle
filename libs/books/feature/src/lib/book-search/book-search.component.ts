@@ -5,10 +5,13 @@ import {
   clearSearch,
   getAllBooks,
   ReadingListBook,
-  searchBooks
+  searchBooks,
+  removeFromReadingList,
+  getReadingList
 } from '@tmo/books/data-access';
 import { FormBuilder } from '@angular/forms';
-import { Book } from '@tmo/shared/models';
+import { Book, ReadingListItem } from '@tmo/shared/models';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'tmo-book-search',
@@ -18,13 +21,16 @@ import { Book } from '@tmo/shared/models';
 export class BookSearchComponent implements OnInit {
   books: ReadingListBook[];
 
+  userInput: string;
+
   searchForm = this.fb.group({
     term: ''
   });
 
   constructor(
     private readonly store: Store,
-    private readonly fb: FormBuilder
+    private readonly fb: FormBuilder,
+    private snackBar: MatSnackBar
   ) {}
 
   get searchTerm(): string {
@@ -45,6 +51,26 @@ export class BookSearchComponent implements OnInit {
 
   addBookToReadingList(book: Book) {
     this.store.dispatch(addToReadingList({ book }));
+    let snackBarRef = this.snackBar.open('Added ' + book.title + ' to reading list', 'Undo', { duration : 3000 });
+    
+    snackBarRef.onAction().subscribe(() => {
+      this.undoAdd(book);
+    });
+  }
+
+  undoAdd(book: Book){
+    let readingList = this.store.select(getReadingList);
+    
+    readingList.subscribe({
+      next: x => { 
+        for(let i = 0; i < x.length; i++){
+          if(x[i].title == book.title){
+            let item = x[i];
+            this.store.dispatch(removeFromReadingList({ item }));
+          }
+        } 
+      }
+    });
   }
 
   searchExample() {
@@ -53,10 +79,11 @@ export class BookSearchComponent implements OnInit {
   }
 
   searchBooks() {
-    if (this.searchForm.value.term) {
-      this.store.dispatch(searchBooks({ term: this.searchTerm }));
-    } else {
-      this.store.dispatch(clearSearch());
-    }
+    // if (this.searchForm.value.term) {
+    //   this.store.dispatch(searchBooks({ term: this.searchTerm }));
+    // } else {
+    //   this.store.dispatch(clearSearch());
+    // }
+    this.store.dispatch(searchBooks({term: this.userInput}));
   }
 }
